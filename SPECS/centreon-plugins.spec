@@ -35,6 +35,7 @@ Requires: perl-DateTime
 Requires: perl-FindBin
 Requires: perl-JSON-XS
 Requires: perl-lib
+Requires: perl-Net-DNS
 Requires: perl-Safe
 Requires: perl-Time-HiRes
 
