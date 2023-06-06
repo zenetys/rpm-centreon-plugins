@@ -1,0 +1,73 @@
+From 4ade4249526f15b4c88e630a9217e9c7a04c0dc9 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Thu, 18 May 2017 08:45:11 +0200
+Subject: [PATCH] Fix building on Perl without "." in @INC
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile.PL   | 8 ++++----
+ xt/999_leak.t | 6 +++---
+ 2 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index a567204..8f1ab89 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -4,9 +4,9 @@
+ # Otherwise, do the usual.
+ BEGIN {
+     if (-e '../.git') {
+-        do 'tools/check_mi_mods.pl';
++        do './tools/check_mi_mods.pl';
+     } else {
+-        unshift @INC, 'inc';
++        unshift @INC, 'inc', '.';
+         require inc::Module::Install;
+         Module::Install->import;
+     }
+@@ -17,7 +17,7 @@ name 'ZMQ-LibZMQ4';
+ all_from 'lib/ZMQ/LibZMQ4.pm';
+ 
+ # Detect libzmq, and display it for sanity
+-do 'tools/detect_zmq.pl';
++do './tools/detect_zmq.pl';
+ print "Detected the following ZMQ settings:\n";
+ foreach my $env (qw(ZMQ_HOME ZMQ_H ZMQ_INCLUDES ZMQ_LIBS ZMQ_TRACE)) {
+     printf " + %s = %s\n", $env, exists $ENV{$env} ? $ENV{$env} : "(null)";
+@@ -192,7 +192,7 @@ repository "git://github.com/lestrrat/p5-ZMQ.git";
+ homepage "https://github.com/lestrrat/p5-ZMQ";
+ bugtracker "https://github.com/lestrrat/p5-ZMQ/issues";
+ 
+-do 'tools/genfiles.pl';
++do './tools/genfiles.pl';
+ WriteAll;
+ 
+ if ($^O eq 'darwin' && -f "Makefile") {
+diff --git a/xt/999_leak.t b/xt/999_leak.t
+index d4e43b2..cfae51b 100644
+--- a/xt/999_leak.t
++++ b/xt/999_leak.t
+@@ -12,13 +12,13 @@ use Test::Requires
+ ;
+ 
+ while ( my $f = <t/*.t> ) {
+-    subtest $f => sub { do $f };
++    subtest $f => sub { do "./$f" };
+ }
+ 
+ while ( my $f = <t/*.t> ) {
+     for my $i (1..10) {
+-        subtest $f => sub { do $f };
++        subtest $f => sub { do "./$f" };
+     }
+ }
+ 
+-done_testing;
+\ No newline at end of file
++done_testing;
+-- 
+2.9.4
+

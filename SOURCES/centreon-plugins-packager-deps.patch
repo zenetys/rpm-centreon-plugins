@@ -1,0 +1,10 @@
+--- a/src/centreon_plugins.pl	2023-06-06 15:58:47.603453612 +0200
++++ b/src/centreon_plugins.pl	2023-06-06 15:59:56.198041722 +0200
+@@ -24,6 +24,7 @@
+ # Not perl embedded compliant at all
+ use FindBin;
+ use lib "$FindBin::Bin";
++use lib "$FindBin::Bin/_packager_deps/lib/perl5";
+ # use lib '/usr/lib/nagios/plugins/';
+ 
+ use centreon::plugins::script;
