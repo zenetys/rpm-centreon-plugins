@@ -7,7 +7,7 @@
 
 Name: centreon-plugins
 Version: 20230118
-Release: 2%{?dist}.zenetys
+Release: 3%{?dist}.zenetys
 Summary: Centreon plugins collection
 Group: Applications/System
 License: ASL 2.0
