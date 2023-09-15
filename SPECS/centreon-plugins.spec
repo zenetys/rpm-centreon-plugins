@@ -6,15 +6,15 @@
 %define packager_deps /opt/centreon-plugins/_packager_deps
 
 Name: centreon-plugins
-Version: 20230118
-Release: 3%{?dist}.zenetys
+Version: 20230912
+Release: 1%{?dist}.zenetys
 Summary: Centreon plugins collection
 Group: Applications/System
 License: ASL 2.0
 URL: https://github.com/centreon/centreon-plugins
 
 # centreon-plugins
-Source0: https://github.com/centreon/centreon-plugins/archive/refs/tags/%{version}.tar.gz
+Source0: https://github.com/centreon/centreon-plugins/archive/refs/tags/plugins-%{version}.tar.gz
 Patch0: centreon-plugins-packager-deps.patch
 
 # bundled dependencies
@@ -55,7 +55,7 @@ Bundled dependencies:
 %prep
 # centreon-plugins
 %setup -c
-cd centreon-plugins-%{version}
+cd centreon-plugins-plugins-%{version}
 %patch0 -p1
 cd ..
 
@@ -83,7 +83,7 @@ cd ..
 
 %install
 # centreon plugins
-cd centreon-plugins-%{version}
+cd centreon-plugins-plugins-%{version}
 install -d -m 0755 %{buildroot}/opt/centreon-plugins
 cp -RT --preserve=timestamp src %{buildroot}/opt/centreon-plugins
 cd ..
@@ -106,7 +106,7 @@ rm -rf %{buildroot}/%{packager_deps}/man
 %{_fixperms} %{buildroot}/%{packager_deps}
 
 %files
-%doc centreon-plugins-%{version}/changelog
-%doc centreon-plugins-%{version}/README.md
-%license centreon-plugins-%{version}/LICENSE.txt
+%doc centreon-plugins-plugins-%{version}/changelog
+%doc centreon-plugins-plugins-%{version}/README.md
+%license centreon-plugins-plugins-%{version}/LICENSE.txt
 /opt/centreon-plugins
