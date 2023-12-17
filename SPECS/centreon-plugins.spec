@@ -2,6 +2,7 @@
 
 %define perl_zmq_libzmq4 ZMQ-LibZMQ4-0.01
 %define perl_zmq_constants ZMQ-Constants-1.04
+%define perl_net_ntp Net-NTP-1.5
 
 %define packager_deps /opt/centreon-plugins/_packager_deps
 
@@ -22,6 +23,7 @@ Source100: https://cpan.metacpan.org/authors/id/M/MO/MOSCONI/%{perl_zmq_libzmq4}
 Patch100: ZMQ-LibZMQ4-0.01-Fix-building-on-Perl-without-.-in-INC.patch
 Source200: https://cpan.metacpan.org/authors/id/D/DM/DMAKI/%{perl_zmq_constants}.tar.gz
 Source300: UUID.pm
+Source400: https://cpan.metacpan.org/authors/id/A/AB/ABH/%{perl_net_ntp}.tar.gz
 
 # build requirements for bundled dependencies
 BuildRequires: findutils
@@ -51,6 +53,7 @@ Bundled dependencies:
 - perl UUID::generate() wrapper for UUID::Tiny (epel)
 - perl %{perl_zmq_constants}
 - perl %{perl_zmq_libzmq4}
+- perl %{perl_net_ntp}
 
 %prep
 # centreon-plugins
@@ -68,6 +71,9 @@ cd ..
 # perl ZMQ-Constants
 %setup -T -D -a 200
 
+# perl Net-NTP
+%setup -T -D -a 400
+
 %build
 # perl ZMQ-LibZMQ4
 cd %{perl_zmq_libzmq4}
@@ -77,6 +83,12 @@ cd ..
 
 # perl ZMQ-Constants
 cd %{perl_zmq_constants}
+perl Makefile.PL INSTALL_BASE=%{packager_deps} NO_PACKLIST=1
+make %{?_smp_mflags}
+cd ..
+
+# perl Net-NTP
+cd %{perl_net_ntp}
 perl Makefile.PL INSTALL_BASE=%{packager_deps} NO_PACKLIST=1
 make %{?_smp_mflags}
 cd ..
@@ -100,6 +112,11 @@ cd ..
 
 # perl UUID::generate() wrapper for UUID::Tiny
 install -Dp -m 0644 %{SOURCE300} %{buildroot}/%{packager_deps}/lib/perl5/
+
+# perl Net-NTP
+cd %{perl_net_ntp}
+make pure_install DESTDIR=%{buildroot}
+cd ..
 
 # cleanup unnecessary stuff from bundled perl modules
 rm -rf %{buildroot}/%{packager_deps}/man
