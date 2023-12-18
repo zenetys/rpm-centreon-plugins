@@ -8,7 +8,7 @@
 
 Name: centreon-plugins
 Version: 20231215
-Release: 1%{?dist}.zenetys
+Release: 2%{?dist}.zenetys
 Summary: Centreon plugins collection
 Group: Applications/System
 License: ASL 2.0
@@ -34,6 +34,7 @@ BuildRequires: zeromq-devel
 Requires: net-snmp-perl
 Requires: perl-base
 Requires: perl-DateTime
+Requires: perl-DateTime-Format-Strptime
 Requires: perl-FindBin
 Requires: perl-JSON-XS
 Requires: perl-lib
