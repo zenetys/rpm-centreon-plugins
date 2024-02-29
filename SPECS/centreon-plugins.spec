@@ -7,8 +7,8 @@
 %define packager_deps /opt/centreon-plugins/_packager_deps
 
 Name: centreon-plugins
-Version: 20231215
-Release: 2%{?dist}.zenetys
+Version: 20240212
+Release: 1%{?dist}.zenetys
 Summary: Centreon plugins collection
 Group: Applications/System
 License: ASL 2.0
