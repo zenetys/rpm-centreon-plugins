@@ -3,12 +3,13 @@
 %define perl_zmq_libzmq4 ZMQ-LibZMQ4-0.01
 %define perl_zmq_constants ZMQ-Constants-1.04
 %define perl_net_ntp Net-NTP-1.5
+%define perl_net_curl Net-Curl-0.56
 
 %define packager_deps /opt/centreon-plugins/_packager_deps
 
 Name: centreon-plugins
 Version: 20240212
-Release: 1%{?dist}.zenetys
+Release: 2%{?dist}.zenetys
 Summary: Centreon plugins collection
 Group: Applications/System
 License: ASL 2.0
@@ -24,9 +25,11 @@ Patch100: ZMQ-LibZMQ4-0.01-Fix-building-on-Perl-without-.-in-INC.patch
 Source200: https://cpan.metacpan.org/authors/id/D/DM/DMAKI/%{perl_zmq_constants}.tar.gz
 Source300: UUID.pm
 Source400: https://cpan.metacpan.org/authors/id/A/AB/ABH/%{perl_net_ntp}.tar.gz
+Source500: https://cpan.metacpan.org/authors/id/S/SY/SYP/%{perl_net_curl}.tar.gz
 
 # build requirements for bundled dependencies
 BuildRequires: findutils
+BuildRequires: libcurl-devel
 BuildRequires: make
 BuildRequires: perl(inc::Module::Install)
 BuildRequires: zeromq-devel
@@ -75,6 +78,9 @@ cd ..
 # perl Net-NTP
 %setup -T -D -a 400
 
+# perl Net-Curl
+%setup -T -D -a 500
+
 %build
 # perl ZMQ-LibZMQ4
 cd %{perl_zmq_libzmq4}
@@ -91,6 +97,12 @@ cd ..
 # perl Net-NTP
 cd %{perl_net_ntp}
 perl Makefile.PL INSTALL_BASE=%{packager_deps} NO_PACKLIST=1
+make %{?_smp_mflags}
+cd ..
+
+# perl Net-Curl
+cd %{perl_net_curl}
+perl Makefile.PL INSTALL_BASE=%{packager_deps} OPTIMIZE="$RPM_OPT_FLAGS" NO_PACKLIST=1
 make %{?_smp_mflags}
 cd ..
 
@@ -116,6 +128,11 @@ install -Dp -m 0644 %{SOURCE300} %{buildroot}/%{packager_deps}/lib/perl5/
 
 # perl Net-NTP
 cd %{perl_net_ntp}
+make pure_install DESTDIR=%{buildroot}
+cd ..
+
+# perl Net-Curl
+cd %{perl_net_curl}
 make pure_install DESTDIR=%{buildroot}
 cd ..
 
