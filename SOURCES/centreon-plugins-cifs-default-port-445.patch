@@ -1,0 +1,28 @@
+From 10caf0af158f97e8690954dbed40e638ccc1bb9c Mon Sep 17 00:00:00 2001
+From: Julien Thomas <jthomas@zenetys.com>
+Date: Fri, 21 Jun 2024 20:26:04 +0200
+Subject: [PATCH 2/2] fix(cifs): Set default smbclient port to 445 instead of
+ 139
+
+Now that option --port is not ignored anymore, let's change the default
+value to 445 (SMB over TCP) instead of 139 (NetBIOS over TCP).
+---
+ src/apps/protocols/cifs/custom/libcifs.pm | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/apps/protocols/cifs/custom/libcifs.pm b/src/apps/protocols/cifs/custom/libcifs.pm
+index b8e2f8b81..774bdb3fe 100644
+--- a/src/apps/protocols/cifs/custom/libcifs.pm
++++ b/src/apps/protocols/cifs/custom/libcifs.pm
+@@ -68,7 +68,7 @@ sub check_options {
+     my ($self, %options) = @_;
+ 
+     $self->{hostname} = (defined($self->{option_results}->{hostname})) ? $self->{option_results}->{hostname} : '';
+-    $self->{port} = (defined($self->{option_results}->{port})) ? $self->{option_results}->{port} : 139;
++    $self->{port} = (defined($self->{option_results}->{port})) ? $self->{option_results}->{port} : 445;
+     $self->{timeout} = (defined($self->{option_results}->{timeout})) && $self->{option_results}->{timeout} =~ /^\d+$/? $self->{option_results}->{timeout} * 1000 : 30000;
+     $self->{cifs_username} = (defined($self->{option_results}->{cifs_username})) ? $self->{option_results}->{cifs_username} : '';
+     $self->{cifs_password} = (defined($self->{option_results}->{cifs_password})) ? $self->{option_results}->{cifs_password} : '';
+-- 
+2.21.1
+

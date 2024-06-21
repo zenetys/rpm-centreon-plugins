@@ -9,7 +9,7 @@
 
 Name: centreon-plugins
 Version: 20240613
-Release: 1%{?dist}.zenetys
+Release: 2%{?dist}.zenetys
 Summary: Centreon plugins collection
 Group: Applications/System
 License: ASL 2.0
@@ -18,6 +18,8 @@ URL: https://github.com/centreon/centreon-plugins
 # centreon-plugins
 Source0: https://github.com/centreon/centreon-plugins/archive/refs/tags/plugins-%{version}.tar.gz
 Patch0: centreon-plugins-packager-deps.patch
+Patch1: centreon-plugins-cifs-options-port-timeout.patch
+Patch2: centreon-plugins-cifs-default-port-445.patch
 
 # bundled dependencies
 Source100: https://cpan.metacpan.org/authors/id/M/MO/MOSCONI/%{perl_zmq_libzmq4}.tar.gz
@@ -30,6 +32,7 @@ Source500: https://cpan.metacpan.org/authors/id/S/SY/SYP/%{perl_net_curl}.tar.gz
 # build requirements for bundled dependencies
 BuildRequires: findutils
 BuildRequires: libcurl-devel
+BuildRequires: libsmbclient-devel
 BuildRequires: make
 BuildRequires: perl(inc::Module::Install)
 BuildRequires: zeromq-devel
@@ -45,6 +48,7 @@ Requires: perl-LWP-Protocol-https
 Requires: perl-Net-DNS
 Requires: perl-Safe
 Requires: perl-Time-HiRes
+Requires: perl-Tie
 
 # requirements for bundled dependencies
 Requires: perl-UUID-Tiny
@@ -58,12 +62,15 @@ Bundled dependencies:
 - perl %{perl_zmq_constants}
 - perl %{perl_zmq_libzmq4}
 - perl %{perl_net_ntp}
+- perl Filesys::SmbClient (dependencies/perl-filesys-smbclient)
 
 %prep
 # centreon-plugins
 %setup -c
 cd centreon-plugins-plugins-%{version}
 %patch0 -p1
+%patch1 -p1
+%patch2 -p1
 cd ..
 
 # perl ZMQ-LibZMQ4
@@ -106,11 +113,24 @@ perl Makefile.PL INSTALL_BASE=%{packager_deps} OPTIMIZE="$RPM_OPT_FLAGS" NO_PACK
 make %{?_smp_mflags}
 cd ..
 
+# centreon plugins
+cd centreon-plugins-plugins-%{version}
+# perl Filesys-SmbClient (dependencies/perl-filesys-smbclient)
+cd dependencies/perl-filesys-smbclient/src
+perl Makefile.PL INSTALL_BASE=%{packager_deps} OPTIMIZE="$RPM_OPT_FLAGS" NO_PACKLIST=1
+make %{?_smp_mflags}
+cd ../../..
+cd ..
+
 %install
 # centreon plugins
 cd centreon-plugins-plugins-%{version}
 install -d -m 0755 %{buildroot}/opt/centreon-plugins
 cp -RT --preserve=timestamp src %{buildroot}/opt/centreon-plugins
+# perl Filesys-SmbClient (dependencies/perl-filesys-smbclient)
+cd dependencies/perl-filesys-smbclient/src/
+make pure_install DESTDIR=%{buildroot}
+cd ../../..
 cd ..
 
 # perl ZMQ-LibZMQ4
