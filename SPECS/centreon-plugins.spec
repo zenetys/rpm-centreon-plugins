@@ -4,12 +4,14 @@
 %define perl_zmq_constants ZMQ-Constants-1.04
 %define perl_net_ntp Net-NTP-1.5
 %define perl_net_curl Net-Curl-0.56
+%define perl_net_curl Net-Curl-0.56
+%define perl_jmx4perl jmx4perl-1.13
 
 %define packager_deps /opt/centreon-plugins/_packager_deps
 
 Name: centreon-plugins
 Version: 20240909
-Release: 1%{?dist}.zenetys
+Release: 2%{?dist}.zenetys
 Summary: Centreon plugins collection
 Group: Applications/System
 License: ASL 2.0
@@ -28,6 +30,7 @@ Source200: https://cpan.metacpan.org/authors/id/D/DM/DMAKI/%{perl_zmq_constants}
 Source300: UUID.pm
 Source400: https://cpan.metacpan.org/authors/id/A/AB/ABH/%{perl_net_ntp}.tar.gz
 Source500: https://cpan.metacpan.org/authors/id/S/SY/SYP/%{perl_net_curl}.tar.gz
+Source600: https://cpan.metacpan.org/authors/id/R/RO/ROLAND/%{perl_jmx4perl}.tar.gz
 
 # build requirements for bundled dependencies
 BuildRequires: findutils
@@ -51,6 +54,10 @@ Requires: perl-Time-HiRes
 Requires: perl-Tie
 
 # requirements for bundled dependencies
+# jmx4perl
+Requires: perl-Module-Find
+Requires: perl-Sys-SigAction
+# perl-UUID wrapper
 Requires: perl-UUID-Tiny
 
 %description
@@ -88,6 +95,9 @@ cd ..
 # perl Net-Curl
 %setup -T -D -a 500
 
+# jmx4perl
+%setup -T -D -a 600
+
 %build
 # perl ZMQ-LibZMQ4
 cd %{perl_zmq_libzmq4}
@@ -111,6 +121,11 @@ cd ..
 cd %{perl_net_curl}
 perl Makefile.PL INSTALL_BASE=%{packager_deps} OPTIMIZE="$RPM_OPT_FLAGS" NO_PACKLIST=1
 make %{?_smp_mflags}
+cd ..
+
+# jmx4perl
+cd %{perl_jmx4perl}
+# noop
 cd ..
 
 # centreon plugins
@@ -154,6 +169,11 @@ cd ..
 # perl Net-Curl
 cd %{perl_net_curl}
 make pure_install DESTDIR=%{buildroot}
+cd ..
+
+# jmx4perl
+cd %{perl_jmx4perl}
+cp -RT --preserve=timestamps lib %{buildroot}/%{packager_deps}/lib/perl5/
 cd ..
 
 # cleanup unnecessary stuff from bundled perl modules
