@@ -1,6 +1,6 @@
 | <nobr>Package name</nobr> | <nobr>Supported targets</nobr> | Includes |
 | :--- | :--- | :--- |
-| <nobr>centreon-plugins</nobr> | el9 | UUID::generate(), ZMQ::Constants, ZMQ::LibZMQ4 |
+| <nobr>centreon-plugins</nobr> | el9 | JMX::Jmx4Perl, UUID::generate(), ZMQ::Constants, ZMQ::LibZMQ4 |
 <br/>
 
 ## Build:
