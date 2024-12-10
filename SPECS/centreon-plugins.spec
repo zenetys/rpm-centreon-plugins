@@ -10,7 +10,7 @@
 %define packager_deps /opt/centreon-plugins/_packager_deps
 
 Name: centreon-plugins
-Version: 20241107
+Version: 20241206
 Release: 1%{?dist}.zenetys
 Summary: Centreon plugins collection
 Group: Applications/System
