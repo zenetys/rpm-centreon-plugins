@@ -11,7 +11,7 @@
 
 Name: centreon-plugins
 Version: 20250700
-Release: 1%{?dist}.zenetys
+Release: 2%{?dist}.zenetys
 Summary: Centreon plugins collection
 Group: Applications/System
 License: ASL 2.0
@@ -40,7 +40,6 @@ BuildRequires: make
 BuildRequires: perl(inc::Module::Install)
 BuildRequires: zeromq-devel
 
-Requires: net-snmp-perl
 Requires: perl-base
 Requires: perl-DateTime
 Requires: perl-DateTime-Format-Strptime
@@ -50,6 +49,7 @@ Requires: perl-lib
 Requires: perl-LWP-Protocol-https
 Requires: perl-Net-DNS
 Requires: perl-Safe
+Requires: perl(SNMP)
 Requires: perl-Time-HiRes
 Requires: perl-Tie
 
