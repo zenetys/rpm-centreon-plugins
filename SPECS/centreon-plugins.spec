@@ -6,12 +6,13 @@
 %define perl_net_curl Net-Curl-0.56
 %define perl_net_curl Net-Curl-0.56
 %define perl_jmx4perl jmx4perl-1.13
+%define perl_dbd_sybase DBD-Sybase-1.26
 
 %define packager_deps /opt/centreon-plugins/_packager_deps
 
 Name: centreon-plugins
 Version: 20250900
-Release: 1%{?dist}.zenetys
+Release: 2%{?dist}.zenetys
 Summary: Centreon plugins collection
 Group: Applications/System
 License: ASL 2.0
@@ -31,18 +32,23 @@ Source300: UUID.pm
 Source400: https://cpan.metacpan.org/authors/id/A/AB/ABH/%{perl_net_ntp}.tar.gz
 Source500: https://cpan.metacpan.org/authors/id/S/SY/SYP/%{perl_net_curl}.tar.gz
 Source600: https://cpan.metacpan.org/authors/id/R/RO/ROLAND/%{perl_jmx4perl}.tar.gz
+Source700: https://cpan.metacpan.org/authors/id/M/ME/MEWP/%{perl_dbd_sybase}.tar.gz
 
 # build requirements for bundled dependencies
 BuildRequires: findutils
+BuildRequires: freetds-devel
 BuildRequires: libcurl-devel
 BuildRequires: libsmbclient-devel
 BuildRequires: make
 BuildRequires: perl(inc::Module::Install)
+BuildRequires: perl-DBI
 BuildRequires: zeromq-devel
 
+Requires: freetds-libs
 Requires: perl-base
 Requires: perl-DateTime
 Requires: perl-DateTime-Format-Strptime
+Requires: perl-DBI
 Requires: perl-FindBin
 Requires: perl-JSON-XS
 Requires: perl-lib
@@ -98,6 +104,9 @@ cd ..
 # jmx4perl
 %setup -T -D -a 600
 
+# perl DBD-Sybase
+%setup -T -D -a 700
+
 %build
 # perl ZMQ-LibZMQ4
 cd %{perl_zmq_libzmq4}
@@ -126,6 +135,20 @@ cd ..
 # jmx4perl
 cd %{perl_jmx4perl}
 # noop
+cd ..
+
+# perl DBD-Sybase
+cd %{perl_dbd_sybase}
+SYBASE=/usr \
+DBD_SYB_USE_ENV=Y \
+DBD_SYB_CHAINED=Y \
+DBD_SYB_THREADED_LIBS=N \
+DBD_SYB_SRV=SYBASE \
+DBD_SYB_DB= \
+DBD_SYB_UID= \
+DBD_SYB_PWD= \
+    perl Makefile.PL INSTALL_BASE=%{packager_deps} OPTIMIZE="$RPM_OPT_FLAGS" NO_PACKLIST=1
+make %{?_smp_mflags}
 cd ..
 
 # centreon plugins
@@ -174,6 +197,11 @@ cd ..
 # jmx4perl
 cd %{perl_jmx4perl}
 cp -RT --preserve=timestamps lib %{buildroot}/%{packager_deps}/lib/perl5/
+cd ..
+
+# perl DBD-Sybase
+cd %{perl_dbd_sybase}
+make pure_install DESTDIR=%{buildroot}
 cd ..
 
 # cleanup unnecessary stuff from bundled perl modules
