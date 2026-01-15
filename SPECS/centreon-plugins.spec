@@ -12,7 +12,7 @@
 
 Name: centreon-plugins
 Version: 20251200
-Release: 1%{?dist}.zenetys
+Release: 2%{?dist}.zenetys
 Summary: Centreon plugins collection
 Group: Applications/System
 License: ASL 2.0
@@ -50,6 +50,7 @@ Requires: perl-DateTime
 Requires: perl-DateTime-Format-Strptime
 Requires: perl-DBI
 Requires: perl-FindBin
+Requires: perl-JSON
 Requires: perl-JSON-XS
 Requires: perl-lib
 Requires: perl-LWP-Protocol-https
