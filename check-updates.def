@@ -1,3 +1,3 @@
-centreon-plugins 20260100 json:map(.name)[]:.+ https://api.github.com/repos/centreon/centreon-plugins/tags <(2[0-9]+([^0-9][0-9]+)?)
+centreon-plugins 20260200 json:map(.name)[]:.+ https://api.github.com/repos/centreon/centreon-plugins/tags <(2[0-9]+([^0-9][0-9]+)?)
 
 #ignore centreon-plugins 20250901
