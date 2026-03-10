@@ -12,7 +12,7 @@
 
 Name: centreon-plugins
 Version: 20260200
-Release: 2%{?dist}.zenetys
+Release: 3%{?dist}.zenetys
 Summary: Centreon plugins collection
 Group: Applications/System
 License: ASL 2.0
@@ -60,6 +60,7 @@ Requires: perl-Safe
 Requires: perl(SNMP)
 Requires: perl-Time-HiRes
 Requires: perl-Tie
+Requires: perl-XML-XPath
 
 # requirements for bundled dependencies
 # jmx4perl
