@@ -11,7 +11,7 @@
 %define packager_deps /opt/centreon-plugins/_packager_deps
 
 Name: centreon-plugins
-Version: 20260400
+Version: 20260600
 Release: 1%{?dist}.zenetys
 Summary: Centreon plugins collection
 Group: Applications/System
@@ -214,5 +214,5 @@ rm -rf %{buildroot}/%{packager_deps}/man
 %files
 %doc centreon-plugins-plugins-%{version}/changelog
 %doc centreon-plugins-plugins-%{version}/README.md
-%license centreon-plugins-plugins-%{version}/LICENSE.txt
+%license centreon-plugins-plugins-%{version}/LICENSE.md
 /opt/centreon-plugins
